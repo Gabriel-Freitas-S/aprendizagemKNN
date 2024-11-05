@@ -1,216 +1,216 @@
 feature1,feature2,label
-1.0,2.0,ClasseA
-2.0,3.0,ClasseA
-3.0,3.0,ClasseB
-6.0,5.0,ClasseB
-7.0,7.0,ClasseB
-4.0,2.0,ClasseA
-5.0,3.5,ClasseA
-6.5,4.0,ClasseB
-7.5,5.5,ClasseB
-8.0,8.0,ClasseB
-2.5,5.1,ClasseA
-1.1,3.2,ClasseA
-4.6,6.7,ClasseB
-3.3,2.2,ClasseB
-5.8,4.2,ClasseB
-1.7,2.1,ClasseC
-6.4,5.1,ClasseD
-1.7,8.0,ClasseC
-8.9,3.3,ClasseA
-2.2,7.0,ClasseB
-7.0,7.6,ClasseB
-9.3,4.6,ClasseC
-7.1,5.5,ClasseC
-1.3,7.4,ClasseA
-5.4,8.5,ClasseD
-3.3,10.0,ClasseD
-8.1,5.6,ClasseC
-4.0,5.5,ClasseB
-4.9,6.5,ClasseC
-6.3,6.7,ClasseB
-9.9,6.1,ClasseC
-9.0,3.6,ClasseD
-6.6,2.8,ClasseD
-5.4,1.9,ClasseA
-5.5,6.6,ClasseC
-4.2,3.6,ClasseA
-9.2,5.9,ClasseD
-5.9,3.4,ClasseB
-5.7,5.0,ClasseC
-7.4,1.8,ClasseD
-8.0,5.9,ClasseA
-4.1,9.0,ClasseD
-4.7,9.1,ClasseC
-10.0,2.8,ClasseA
-2.2,5.7,ClasseA
-6.8,5.3,ClasseC
-3.8,9.3,ClasseA
-5.8,7.5,ClasseA
-6.5,3.4,ClasseB
-9.8,5.9,ClasseD
-4.7,4.8,ClasseC
-2.6,3.6,ClasseB
-7.3,3.6,ClasseD
-10.0,2.4,ClasseB
-8.1,4.6,ClasseC
-3.6,6.9,ClasseB
-7.2,9.4,ClasseC
-7.0,6.0,ClasseA
-5.4,7.3,ClasseC
-6.5,1.3,ClasseD
-8.5,2.6,ClasseB
-5.8,3.7,ClasseC
-9.4,3.9,ClasseD
-1.3,4.7,ClasseA
-6.8,4.4,ClasseA
-4.6,8.2,ClasseA
-8.0,3.8,ClasseB
-3.5,7.7,ClasseD
-7.2,6.4,ClasseC
-9.5,5.8,ClasseC
-7.4,6.8,ClasseC
-9.8,2.3,ClasseA
-5.5,3.9,ClasseC
-7.8,1.1,ClasseB
-4.3,8.6,ClasseA
-6.7,9.4,ClasseA
-9.7,3.5,ClasseB
-2.5,7.9,ClasseB
-3.3,9.0,ClasseB
-3.9,7.1,ClasseD
-6.0,5.9,ClasseA
-5.7,1.1,ClasseD
-9.7,2.8,ClasseA
-1.8,6.9,ClasseA
-3.1,2.7,ClasseA
-7.1,2.0,ClasseA
-4.8,5.1,ClasseC
-8.8,7.0,ClasseB
-7.5,5.9,ClasseB
-6.0,9.7,ClasseD
-5.8,2.5,ClasseB
-6.9,6.3,ClasseC
-3.6,9.9,ClasseD
-7.4,4.8,ClasseC
-4.3,3.2,ClasseC
-6.4,6.6,ClasseB
-6.1,5.9,ClasseC
-7.7,6.6,ClasseB
-4.8,4.5,ClasseB
-6.3,6.2,ClasseA
-1.2,3.4,ClasseB
-3.2,4.8,ClasseA
-9.4,7.9,ClasseB
-5.1,6.2,ClasseD
-9.4,4.9,ClasseA
-5.5,5.9,ClasseA
-6.6,5.0,ClasseA
-5.6,3.2,ClasseD
-8.1,6.6,ClasseC
-7.0,4.1,ClasseA
-7.2,6.0,ClasseC
-1.8,8.1,ClasseD
-7.6,6.4,ClasseC
-7.5,3.6,ClasseB
-6.5,6.7,ClasseD
-2.8,5.1,ClasseC
-1.1,8.4,ClasseB
-3.6,6.4,ClasseA
-3.1,8.8,ClasseB
-7.3,1.8,ClasseD
-3.7,6.9,ClasseC
-5.3,3.5,ClasseA
-7.8,5.5,ClasseD
-7.7,7.8,ClasseB
-5.8,1.3,ClasseD
-4.2,2.0,ClasseD
-1.3,1.4,ClasseC
-6.3,7.6,ClasseC
-3.2,3.0,ClasseB
-2.3,2.2,ClasseA
-3.6,5.2,ClasseD
-3.7,2.6,ClasseC
-4.5,5.4,ClasseA
-4.6,7.8,ClasseB
-7.7,4.5,ClasseA
-9.2,8.8,ClasseA
-4.8,7.5,ClasseB
-8.4,3.5,ClasseC
-9.6,2.9,ClasseC
-6.3,5.9,ClasseA
-2.5,5.5,ClasseB
-7.9,2.6,ClasseC
-4.6,7.0,ClasseB
-5.5,4.9,ClasseC
-1.7,3.4,ClasseB
-7.4,8.3,ClasseA
-7.8,2.9,ClasseC
-3.9,1.9,ClasseA
-7.9,1.5,ClasseB
-5.9,9.0,ClasseB
-2.0,9.0,ClasseA
-5.6,6.8,ClasseC
-4.2,2.5,ClasseC
-5.1,5.8,ClasseD
-4.6,9.9,ClasseC
-3.5,2.7,ClasseD
-9.1,9.3,ClasseB
-3.2,5.1,ClasseC
-7.0,8.6,ClasseC
-5.4,2.5,ClasseD
-5.7,1.8,ClasseA
-9.4,6.6,ClasseB
-5.1,10.0,ClasseC
-5.4,2.5,ClasseB
-8.7,5.8,ClasseC
-5.9,9.2,ClasseC
-3.7,3.3,ClasseA
-6.8,4.9,ClasseA
-4.5,7.9,ClasseD
-6.2,2.6,ClasseA
-7.3,5.0,ClasseB
-4.5,1.3,ClasseD
-2.8,2.6,ClasseC
-5.0,4.7,ClasseA
-4.0,8.6,ClasseA
-6.6,2.1,ClasseB
-6.3,8.5,ClasseD
-5.9,6.7,ClasseD
-6.4,4.1,ClasseA
-6.8,2.2,ClasseA
-2.4,7.8,ClasseB
-8.8,7.1,ClasseB
-9.6,9.4,ClasseC
-9.2,2.1,ClasseC
-4.8,9.1,ClasseB
-2.4,2.6,ClasseB
-6.5,6.4,ClasseD
-3.3,1.2,ClasseC
-5.2,2.1,ClasseB
-8.2,5.6,ClasseD
-5.9,4.2,ClasseC
-2.8,3.4,ClasseA
-1.8,7.5,ClasseB
-9.4,5.4,ClasseB
-7.6,1.5,ClasseC
-5.7,9.0,ClasseC
-2.5,7.1,ClasseB
-3.1,5.3,ClasseB
-4.9,6.7,ClasseB
-5.0,6.9,ClasseD
-6.1,6.1,ClasseD
-4.3,5.9,ClasseA
-2.1,4.6,ClasseC
-6.0,5.4,ClasseD
-5.5,2.8,ClasseB
-4.5,1.5,ClasseB
-6.0,6.9,ClasseC
-4.7,4.9,ClasseA
-2.2,5.5,ClasseB
-2.7,1.5,ClasseB
-5.8,3.2,ClasseA
-7.5,8.2,ClasseD
-4.1,8.7,ClasseB
-5.9,4.8,ClasseA
-7.0,4.0,ClasseB
+1.0,2.0,Classe A
+2.0,3.0,Classe A
+3.0,3.0,Classe B
+6.0,5.0,Classe B
+7.0,7.0,Classe B
+4.0,2.0,Classe A
+5.0,3.5,Classe A
+6.5,4.0,Classe B
+7.5,5.5,Classe B
+8.0,8.0,Classe B
+2.5,5.1,Classe A
+1.1,3.2,Classe A
+4.6,6.7,Classe B
+3.3,2.2,Classe B
+5.8,4.2,Classe B
+1.7,2.1,Classe C
+6.4,5.1,Classe D
+1.7,8.0,Classe C
+8.9,3.3,Classe A
+2.2,7.0,Classe B
+7.0,7.6,Classe B
+9.3,4.6,Classe C
+7.1,5.5,Classe C
+1.3,7.4,Classe A
+5.4,8.5,Classe D
+3.3,10.0,Classe D
+8.1,5.6,Classe C
+4.0,5.5,Classe B
+4.9,6.5,Classe C
+6.3,6.7,Classe B
+9.9,6.1,Classe C
+9.0,3.6,Classe D
+6.6,2.8,Classe D
+5.4,1.9,Classe A
+5.5,6.6,Classe C
+4.2,3.6,Classe A
+9.2,5.9,Classe D
+5.9,3.4,Classe B
+5.7,5.0,Classe C
+7.4,1.8,Classe D
+8.0,5.9,Classe A
+4.1,9.0,Classe D
+4.7,9.1,Classe C
+10.0,2.8,Classe A
+2.2,5.7,Classe A
+6.8,5.3,Classe C
+3.8,9.3,Classe A
+5.8,7.5,Classe A
+6.5,3.4,Classe B
+9.8,5.9,Classe D
+4.7,4.8,Classe C
+2.6,3.6,Classe B
+7.3,3.6,Classe D
+10.0,2.4,Classe B
+8.1,4.6,Classe C
+3.6,6.9,Classe B
+7.2,9.4,Classe C
+7.0,6.0,Classe A
+5.4,7.3,Classe C
+6.5,1.3,Classe D
+8.5,2.6,Classe B
+5.8,3.7,Classe C
+9.4,3.9,Classe D
+1.3,4.7,Classe A
+6.8,4.4,Classe A
+4.6,8.2,Classe A
+8.0,3.8,Classe B
+3.5,7.7,Classe D
+7.2,6.4,Classe C
+9.5,5.8,Classe C
+7.4,6.8,Classe C
+9.8,2.3,Classe A
+5.5,3.9,Classe C
+7.8,1.1,Classe B
+4.3,8.6,Classe A
+6.7,9.4,Classe A
+9.7,3.5,Classe B
+2.5,7.9,Classe B
+3.3,9.0,Classe B
+3.9,7.1,Classe D
+6.0,5.9,Classe A
+5.7,1.1,Classe D
+9.7,2.8,Classe A
+1.8,6.9,Classe A
+3.1,2.7,Classe A
+7.1,2.0,Classe A
+4.8,5.1,Classe C
+8.8,7.0,Classe B
+7.5,5.9,Classe B
+6.0,9.7,Classe D
+5.8,2.5,Classe B
+6.9,6.3,Classe C
+3.6,9.9,Classe D
+7.4,4.8,Classe C
+4.3,3.2,Classe C
+6.4,6.6,Classe B
+6.1,5.9,Classe C
+7.7,6.6,Classe B
+4.8,4.5,Classe B
+6.3,6.2,Classe A
+1.2,3.4,Classe B
+3.2,4.8,Classe A
+9.4,7.9,Classe B
+5.1,6.2,Classe D
+9.4,4.9,Classe A
+5.5,5.9,Classe A
+6.6,5.0,Classe A
+5.6,3.2,Classe D
+8.1,6.6,Classe C
+7.0,4.1,Classe A
+7.2,6.0,Classe C
+1.8,8.1,Classe D
+7.6,6.4,Classe C
+7.5,3.6,Classe B
+6.5,6.7,Classe D
+2.8,5.1,Classe C
+1.1,8.4,Classe B
+3.6,6.4,Classe A
+3.1,8.8,Classe B
+7.3,1.8,Classe D
+3.7,6.9,Classe C
+5.3,3.5,Classe A
+7.8,5.5,Classe D
+7.7,7.8,Classe B
+5.8,1.3,Classe D
+4.2,2.0,Classe D
+1.3,1.4,Classe C
+6.3,7.6,Classe C
+3.2,3.0,Classe B
+2.3,2.2,Classe A
+3.6,5.2,Classe D
+3.7,2.6,Classe C
+4.5,5.4,Classe A
+4.6,7.8,Classe B
+7.7,4.5,Classe A
+9.2,8.8,Classe A
+4.8,7.5,Classe B
+8.4,3.5,Classe C
+9.6,2.9,Classe C
+6.3,5.9,Classe A
+2.5,5.5,Classe B
+7.9,2.6,Classe C
+4.6,7.0,Classe B
+5.5,4.9,Classe C
+1.7,3.4,Classe B
+7.4,8.3,Classe A
+7.8,2.9,Classe C
+3.9,1.9,Classe A
+7.9,1.5,Classe B
+5.9,9.0,Classe B
+2.0,9.0,Classe A
+5.6,6.8,Classe C
+4.2,2.5,Classe C
+5.1,5.8,Classe D
+4.6,9.9,Classe C
+3.5,2.7,Classe D
+9.1,9.3,Classe B
+3.2,5.1,Classe C
+7.0,8.6,Classe C
+5.4,2.5,Classe D
+5.7,1.8,Classe A
+9.4,6.6,Classe B
+5.1,10.0,Classe C
+5.4,2.5,Classe B
+8.7,5.8,Classe C
+5.9,9.2,Classe C
+3.7,3.3,Classe A
+6.8,4.9,Classe A
+4.5,7.9,Classe D
+6.2,2.6,Classe A
+7.3,5.0,Classe B
+4.5,1.3,Classe D
+2.8,2.6,Classe C
+5.0,4.7,Classe A
+4.0,8.6,Classe A
+6.6,2.1,Classe B
+6.3,8.5,Classe D
+5.9,6.7,Classe D
+6.4,4.1,Classe A
+6.8,2.2,Classe A
+2.4,7.8,Classe B
+8.8,7.1,Classe B
+9.6,9.4,Classe C
+9.2,2.1,Classe C
+4.8,9.1,Classe B
+2.4,2.6,Classe B
+6.5,6.4,Classe D
+3.3,1.2,Classe C
+5.2,2.1,Classe B
+8.2,5.6,Classe D
+5.9,4.2,Classe C
+2.8,3.4,Classe A
+1.8,7.5,Classe B
+9.4,5.4,Classe B
+7.6,1.5,Classe C
+5.7,9.0,Classe C
+2.5,7.1,Classe B
+3.1,5.3,Classe B
+4.9,6.7,Classe B
+5.0,6.9,Classe D
+6.1,6.1,Classe D
+4.3,5.9,Classe A
+2.1,4.6,Classe C
+6.0,5.4,Classe D
+5.5,2.8,Classe B
+4.5,1.5,Classe B
+6.0,6.9,Classe C
+4.7,4.9,Classe A
+2.2,5.5,Classe B
+2.7,1.5,Classe B
+5.8,3.2,Classe A
+7.5,8.2,Classe D
+4.1,8.7,Classe B
+5.9,4.8,Classe A
+7.0,4.0,Classe B
