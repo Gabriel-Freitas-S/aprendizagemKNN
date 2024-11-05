@@ -1,6 +1,8 @@
 # Implementação do Algoritmo K-Nearest Neighbors (KNN) em Rust
 
-Este programa em Rust implementa o algoritmo de aprendizado de máquina K-Nearest Neighbors (KNN). O KNN é um algoritmo simples e versátil usado para classificação e regressão. Neste caso, ele é usado para classificar pontos de dados em diferentes classes.
+Este programa em Rust implementa o algoritmo de aprendizado de máquina K-Nearest Neighbors (KNN).
+O KNN é um algoritmo simples e versátil usado para classificação e regressão.
+Neste caso, ele é usado para classificar pontos de dados em diferentes classes.
 
 ## Arquivo `main.rs`
 
@@ -145,58 +147,49 @@ fn main() -> Result<(), Box<dyn Error>> {
     let rotulo = knn(&dados_treinamento, &ponto_teste, 3);
     // Exibir o rótulo previsto para o ponto de teste
     println!("Rótulo previsto para os dados de teste {:?} é {}", ponto_teste.caracteristicas, rotulo);
+
     Ok(())
 }
 ```
-
 **Explicação detalhada do código:**
 
 1. **Importar bibliotecas:**
-    - `csv`: Usada para ler e processar arquivos CSV.
-    - `serde`: Usada para serialização e desserialização de dados.
-    - `std::cmp::Ordering`: Usada para comparar valores.
-    - `std::collections::BinaryHeap`: Usada para armazenar os vizinhos mais próximos.
-    - `std::error::Error`: Usada para tratamento de erros.
-    - `std::process::Command`: Usada para executar comandos do sistema.
-    - `std::env`: Usada para interagir com o ambiente do sistema.
+   - `csv`: Usada para ler e processar arquivos CSV.
+   - `serde`: Usada para serialização e desserialização de dados.
+   - `std::cmp::Ordering`: Usada para comparar valores.
+   - `std::collections::BinaryHeap`: Usada para armazenar os vizinhos mais próximos.
+   - `std::error::Error`: Usada para tratamento de erros.
+   - `std::process::Command`: Usada para executar comandos do sistema.
+   - `std::env`: Usada para interagir com o ambiente do sistema.
 
 2. **Estruturas de dados:**
-    - `Ponto`: Representa um ponto de dados com características (números) e um rótulo (classe).
-    - `Vizinho`: Armazena a distância e o rótulo de um ponto de dados em relação a outro ponto.
+   - `Ponto`: Representa um ponto de dados com características (números) e um rótulo (classe).
+   - `Vizinho`: Armazena a distância e o rótulo de um ponto de dados em relação a outro ponto.
 
 3. **Funções:**
-    - `distancia_euclidiana`: Calcula a distância euclidiana entre dois pontos.
-    - `knn`: Implementa o algoritmo KNN.
-        - Calcula a distância entre o ponto de teste e cada ponto de treinamento.
-        - Armazena as distâncias e rótulos em um heap.
-        - Seleciona os k vizinhos mais próximos.
-        - Encontra o rótulo mais comum entre os k vizinhos.
-    - `carregar_dados_do_csv`: Carrega dados de um arquivo CSV.
-    - `limpar_terminal`: Limpa o terminal.
+   - `distancia_euclidiana`: Calcula a distância euclidiana entre dois pontos.
+   - `knn`: Implementa o algoritmo KNN.
+      - Calcula a distância entre o ponto de teste e cada ponto de treinamento.
+      - Armazena as distâncias e rótulos em um heap.
+      - Seleciona os k vizinhos mais próximos.
+      - Encontra o rótulo mais comum entre os k vizinhos.
+   - `carregar_dados_do_csv`: Carrega dados de um arquivo CSV.
+   - `limpar_terminal`: Limpa o terminal.
 
 4. **Função principal (`main`)**:
-    - Limpa o terminal.
-    - Carrega os dados de treinamento do arquivo CSV.
-    - Define um ponto de teste.
-    - Aplica o algoritmo KNN ao ponto de teste.
-    - Exibe o rótulo previsto para o ponto de teste.
+   - Limpa o terminal.
+   - Carrega os dados de treinamento do arquivo CSV.
+   - Define um ponto de teste.
+   - Aplica o algoritmo KNN ao ponto de teste.
+   - Exibe o rótulo previsto para o ponto de teste.
 
 ## Exemplo de Uso
 
-O arquivo `dados.csv` contém dados de treinamento com duas características (feature1 e feature2) e um rótulo (label). O programa define um ponto de teste com características `[4.5, 8.0]` e usa o algoritmo KNN com `k=3` para prever o rótulo do ponto de teste.
+O arquivo `dados.csv` contém dados de treinamento com 2 características (feature1 e feature2) e um rótulo (label).
+O programa define um ponto de teste com características `[4.5, 8.0]` e usa o algoritmo KNN com `k=3` para prever o rótulo do ponto de teste.
 
 **Saída:**
 
 ```
 Rótulo previsto para os dados de teste [4.5, 8.0] é ClasseB
 ```
-
-## Como Executar
-
-1. Certifique-se de ter o Rust instalado em seu sistema.
-2. Clone este repositório.
-3. Navegue até o diretório do projeto.
-4. Execute o comando `
-
-
-#### Trabalho faculdade | Aprendizagem KNN
