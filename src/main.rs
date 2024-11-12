@@ -1,148 +1,190 @@
-use csv::ReaderBuilder; // Biblioteca para ler e processar arquivos CSV
-use serde::Deserialize; // Biblioteca para serialização e desserialização de dados
-use std::cmp::Ordering; // Usado para comparar valores
-use std::collections::BinaryHeap; // Usado para armazenar os vizinhos mais próximos
-use std::error::Error; // Usado para tratamento de erros
-use std::process::Command; // Usado para executar comandos do sistema
+// ==================== IMPORTAÇÃO DE BIBLIOTECAS ====================
+use csv::ReaderBuilder;        // Biblioteca externa para manipulação de arquivos CSV
+use serde::Deserialize;        // Biblioteca para converter (deserializar) dados de forma automática
+use std::cmp::Ordering;        // Módulo padrão para definir como comparar elementos
+use std::collections::BinaryHeap; // Estrutura de dados de fila de prioridade (heap)
+use std::error::Error;         // Trait para tratamento padronizado de erros
+use std::process::Command;     // Módulo para executar comandos do sistema operacional
 
-// Estrutura para armazenar um ponto de dados
-// Um ponto possui um vetor de características (números) e um rótulo (string)
+// ==================== ESTRUTURA DE DADOS PRINCIPAIS ====================
+// #[derive] são atributos em Rust que adicionam funcionalidades às estruturas
+// Debug: permite imprimir a estrutura para debug
+// Clone: permite criar cópias da estrutura
+// Deserialize: permite converter dados externos (como CSV) para esta estrutura
 #[derive(Debug, Clone, Deserialize)]
 struct Ponto {
-    caracteristicas: Vec<f64>, // Vetor de características do ponto
-    rotulo: String, // Rótulo ou classe do ponto
+    caracteristicas: Vec<f64>, // Vec<f64> é um vetor dinâmico de números decimais
+    rotulo: String,            // String é o tipo de texto em Rust
 }
 
+// impl em Rust define a implementação de métodos para uma estrutura
+// Similar a métodos de classe em outras linguagens
 impl Ponto {
-    // Função para criar uma nova instância de Ponto
+    // fn define uma função em Rust
+    // -> indica o tipo de retorno da função
+    // Self refere-se ao tipo atual (Ponto)
     fn novo(caracteristicas: Vec<f64>, rotulo: String) -> Self {
-        Self { caracteristicas, rotulo }
+        Self { caracteristicas, rotulo } // Sintaxe curta quando o nome do campo e da variável são iguais
     }
 }
 
-// Função para calcular a distância euclidiana entre dois pontos
-// A distância euclidiana é a raiz quadrada da soma das diferenças quadradas de cada coordenada
+// ==================== FUNÇÃO DE DISTÂNCIA ====================
+// fn define uma função "solta" (não associada a uma estrutura)
+// &Ponto indica uma referência a um Ponto (sem transferir propriedade)
 fn distancia_euclidiana(ponto1: &Ponto, ponto2: &Ponto) -> f64 {
-    ponto1.caracteristicas.iter() // Iterar sobre as características do primeiro ponto
-        .zip(ponto2.caracteristicas.iter()) // Combinar as características dos dois pontos
-        .map(|(a, b)| (a - b).powi(2)) // Calcular a diferença ao quadrado para cada par de características
-        .sum::<f64>() // Somar as diferenças ao quadrado
-        .sqrt() // Calcular a raiz quadrada da soma
+    ponto1.caracteristicas.iter()     // iter() cria um iterador sobre as características
+        .zip(ponto2.caracteristicas.iter()) // zip combina dois iteradores em pares
+        .map(|(a, b)| (a - b).powi(2))     // map transforma cada par em sua diferença ao quadrado
+        .sum::<f64>()                       // soma todos os valores (anotação de tipo explícita)
+        .sqrt()                             // calcula a raiz quadrada
 }
 
-// Estrutura auxiliar para manter a distância e o rótulo em uma estrutura Heap
+// ==================== ESTRUTURA AUXILIAR PARA VIZINHOS ====================
 #[derive(Debug)]
 struct Vizinho {
-    distancia: f64, // Distância do vizinho ao ponto de teste
-    rotulo: String, // Rótulo do vizinho
+    distancia: f64,
+    rotulo: String,
 }
 
 impl Vizinho {
-    // Função para criar uma nova instância de Vizinho
     fn novo(distancia: f64, rotulo: String) -> Self {
         Self { distancia, rotulo }
     }
 }
 
-// Implementação para comparação de distância (menor distância tem prioridade)
-// Implementar o trait Ord para permitir a estrutura ser usada em um BinaryHeap
+// ==================== IMPLEMENTAÇÃO DE ORDENAÇÃO ====================
+// Em Rust, para usar uma estrutura em uma coleção ordenada (como BinaryHeap),
+// precisamos implementar traits (interfaces) de comparação
+
+// Ord é usado para definir uma ordenação total (todos elementos são comparáveis)
 impl Ord for Vizinho {
     fn cmp(&self, outro: &Self) -> Ordering {
-        // Comparar as distâncias dos vizinhos.
-        // A ordem é invertida para que o BinaryHeap funcione como um heap de mínimo,
-        // onde o elemento com a menor distância tem a maior prioridade.
+        // partial_cmp para f64 retorna Option<Ordering>, unwrap converte para Ordering
+        // Invertemos a ordem para ter um heap de mínimo (menor distância = maior prioridade)
         outro.distancia.partial_cmp(&self.distancia).unwrap()
     }
 }
 
+// PartialOrd é necessário para tipos que podem ser parcialmente ordenados
 impl PartialOrd for Vizinho {
     fn partial_cmp(&self, outro: &Self) -> Option<Ordering> {
-        // Usar a função cmp definida em Ord para fornecer a ordenação parcial.
         Some(self.cmp(outro))
     }
 }
 
+// PartialEq define quando dois elementos são iguais
 impl PartialEq for Vizinho {
     fn eq(&self, outro: &Self) -> bool {
-        // Dois Vizinhos são considerados iguais se suas distâncias forem iguais.
         self.distancia == outro.distancia
     }
 }
 
-impl Eq for Vizinho {} // Trait marcador que indica que a relação de igualdade definida em PartialEq é reflexiva, simétrica e transitiva.
+// Eq é um trait marcador que indica que a igualdade é uma relação de equivalência
+impl Eq for Vizinho {}
 
-// Função K-Nearest Neighbors
-// Dado um conjunto de treinamento, um ponto de teste e um valor k,
-// encontra os k vizinhos mais próximos do ponto de teste e retorna o rótulo mais comum
+// ==================== ALGORITMO KNN ====================
+// &[Ponto] é uma fatia (slice) de Pontos - uma visão de um array
+// usize é o tipo usado para índices e tamanhos em Rust
 fn knn(treinamento: &[Ponto], ponto_teste: &Ponto, k: usize) -> String {
-    let mut heap = BinaryHeap::new(); // Criar um heap para armazenar os vizinhos mais próximos
+    // BinaryHeap é uma fila de prioridade que mantém o menor elemento no topo
+    let mut heap = BinaryHeap::new();
 
-    // Calcular a distância de cada ponto de treinamento até o ponto de teste
+    // Calcular distâncias e adicionar ao heap
     for ponto_treinamento in treinamento {
-        let distancia = distancia_euclidiana(ponto_teste, ponto_treinamento); // Calcular a distância
-        heap.push(Vizinho::novo(distancia, ponto_treinamento.rotulo.clone())); // Adicionar o vizinho ao heap
+        let distancia = distancia_euclidiana(ponto_teste, ponto_treinamento);
+        heap.push(Vizinho::novo(distancia, ponto_treinamento.rotulo.clone()));
     }
 
-    // Coletar os rótulos dos k vizinhos mais próximos
-    let mut k_vizinhos_rotulos = Vec::new(); // Criar um vetor para armazenar os rótulos dos k vizinhos mais próximos
+    // Coletar os k vizinhos mais próximos
+    let mut k_vizinhos_rotulos = Vec::new();
     for _ in 0..k {
-        if let Some(vizinho) = heap.pop() { // Remover o vizinho com a menor distância do heap
-            k_vizinhos_rotulos.push(vizinho.rotulo); // Adicionar o rótulo do vizinho ao vetor
+        // if let é usado para desempacotar Option de forma segura
+        if let Some(vizinho) = heap.pop() {
+            k_vizinhos_rotulos.push(vizinho.rotulo);
         }
     }
 
-    // Contar a frequência de cada rótulo nos k vizinhos mais próximos
-    let mut contador_rotulos = std::collections::HashMap::new(); // Criar um HashMap para contar a frequência dos rótulos
+    // Contar frequência dos rótulos usando HashMap
+    let mut contador_rotulos = std::collections::HashMap::new();
     for rotulo in k_vizinhos_rotulos {
-        *contador_rotulos.entry(rotulo).or_insert(0) += 1; // Incrementar o contador do rótulo
+        // entry API fornece uma maneira elegante de inserir ou atualizar valores
+        *contador_rotulos.entry(rotulo).or_insert(0) += 1;
     }
 
-    // Retornar o rótulo mais comum entre os k vizinhos
-    contador_rotulos.into_iter() // Iterar sobre os rótulos e suas contagens
-        .max_by_key(|&(_, count)| count) // Encontrar o rótulo com a maior contagem
-        .map(|(rotulo, _)| rotulo) // Extrair o rótulo
-        .unwrap() // Desempacotar o rótulo (assumindo que há pelo menos um rótulo)
+    // Encontrar o rótulo mais frequente
+    contador_rotulos.into_iter()
+        .max_by_key(|&(_, count)| count) // Encontra entrada com maior contagem
+        .map(|(rotulo, _)| rotulo)       // Extrai apenas o rótulo
+        .unwrap()                        // Converte Option para valor (assume que existe)
 }
 
-// Função para carregar dados de um arquivo CSV
-// Cada linha do CSV é um ponto com características e um rótulo
+// ==================== FUNÇÕES DE ENTRADA/SAÍDA ====================
+// Result é um tipo que representa sucesso (Ok) ou erro (Err)
+// Box<dyn Error> é um tipo que pode conter qualquer erro
 fn carregar_dados_do_csv(caminho_arquivo: &str) -> Result<Vec<Ponto>, Box<dyn Error>> {
-    let mut leitor = ReaderBuilder::new().from_path(caminho_arquivo)?; // Criar um leitor de CSV
-    let mut pontos = Vec::new(); // Criar um vetor para armazenar os pontos
+    let mut leitor = ReaderBuilder::new().from_path(caminho_arquivo)?; // ? propaga erros
+    let mut pontos = Vec::new();
 
-    // Ler cada registro do CSV e criar um Ponto a partir dele
-    for resultado in leitor.deserialize() { // Desserializar cada registro do CSV
-        let registro: (f64, f64, String) = resultado?; // Converter o registro em uma tupla (f64, f64, String)
-        pontos.push(Ponto::novo(vec![registro.0, registro.1], registro.2)); // Criar um Ponto a partir do registro e adicioná-lo ao vetor
+    // deserialize converte cada linha do CSV para uma tupla
+    for resultado in leitor.deserialize() {
+        let registro: (f64, f64, String) = resultado?;
+        pontos.push(Ponto::novo(vec![registro.0, registro.1], registro.2));
     }
 
-    Ok(pontos) // Retornar o vetor de pontos
+    Ok(pontos) // Retorna sucesso com os pontos
 }
 
-// Função para limpar o terminal
+// Função para limpar o terminal de forma cross-platform
 fn limpar_terminal() {
-    if cfg!(target_os = "windows") { // Se o sistema operacional for Windows
-        Command::new("cmd").args(&["/C", "cls"]).status().unwrap(); // Executar o comando "cls"
-    } else { // Se o sistema operacional for Linux ou macOS
-        Command::new("clear").status().unwrap(); // Executar o comando "clear"
+    // cfg! é uma macro que verifica o sistema operacional em tempo de compilação
+    if cfg!(target_os = "windows") {
+        Command::new("cmd").args(&["/C", "cls"]).status().unwrap();
+    } else {
+        Command::new("clear").status().unwrap();
     }
 }
 
+// Esta função calcula o valor de "k" para o algoritmo KNN
+// com base no tamanho do conjunto de dados de treinamento.
+// Ela usa a heurística de calcular a raiz quadrada do
+// total de dados e arredondar o resultado para cima.
+fn calcular_k(total_dados: usize) -> usize {
+    // Converte o tamanho do conjunto de dados (usize) em um número de ponto flutuante (f64)
+    // para poder calcular a raiz quadrada.
+    (total_dados as f64)
+        // Calcula a raiz quadrada do total de dados.
+        .sqrt()
+        // Arredonda o resultado para cima, para o próximo número inteiro.
+        .ceil()
+        // Converte o resultado (f64) de volta para usize, que é o tipo esperado pelo algoritmo KNN.
+        as usize
+}
+
+// ==================== FUNÇÃO PRINCIPAL ====================
+// main() é o ponto de entrada do programa
+// -> Result<(), Box<dyn Error>> indica que a função pode retornar erro
 fn main() -> Result<(), Box<dyn Error>> {
-    // Limpar o terminal
     limpar_terminal();
 
-    // Carregar dados do arquivo CSV
-    let dados_treinamento = carregar_dados_do_csv("src/dados.csv")?; // Carregar os dados de treinamento do arquivo CSV
+    // Carrega dados e trata possíveis erros com ?
+    let dados_treinamento = carregar_dados_do_csv("src/dados.csv")?;
 
-    // Definir um ponto de teste
-    let ponto_teste = Ponto::novo(vec![4.5, 8.0], "Desconhecido".to_string()); // Criar um ponto de teste
+    let total_dados = dados_treinamento.len();
 
-    // Aplicar KNN com k=3
-    let rotulo = knn(&dados_treinamento, &ponto_teste, 3); // Aplicar o algoritmo KNN com k=3
+    let k = calcular_k(total_dados);
 
-    // Exibir o rótulo previsto para o ponto de teste
-    println!("Rótulo previsto para os dados de teste {:?} é {}", ponto_teste.caracteristicas, rotulo); // Imprimir o rótulo previsto
+    // Cria um ponto de teste com duas características
+    let ponto_teste = Ponto::novo(vec![4.5, 8.0], "Desconhecido".to_string());
 
-    Ok(()) // Retornar Ok(()) para indicar que o programa foi executado com sucesso
+    // Executa o algoritmo KNN
+    let rotulo = knn(&dados_treinamento, &ponto_teste, k);
+
+    // Exibe resultado
+    println!(
+        "Rótulo previsto para os dados de teste {:?} é {}",
+        ponto_teste.caracteristicas,
+        rotulo
+    );
+
+    Ok(()) // Retorna sucesso (unit type)
 }

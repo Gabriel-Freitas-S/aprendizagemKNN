@@ -1,195 +1,198 @@
 # Implementação do Algoritmo K-Nearest Neighbors (KNN) em Rust
 
-Este programa em Rust implementa o algoritmo de aprendizado de máquina K-Nearest Neighbors (KNN).
-O KNN é um algoritmo simples e versátil usado para classificação e regressão.
-Neste caso, ele é usado para classificar pontos de dados em diferentes classes.
+## Índice
 
-## Arquivo `main.rs`
+- [Introdução](#introdução)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Entendendo o Algoritmo KNN](#entendendo-o-algoritmo-knn)
+- [Conjunto de Dados](#conjunto-de-dados)
+- [Explicação Detalhada do Código](#explicação-detalhada-do-código)
+    - [Bibliotecas Utilizadas](#bibliotecas-utilizadas)
+    - [Estruturas de Dados Principais](#estruturas-de-dados-principais)
+        - [Estrutura Ponto](#estrutura-ponto)
+        - [Estrutura Vizinho](#estrutura-vizinho)
+    - [Funções Principais](#funções-principais)
+        - [Distância Euclidiana](#distância-euclidiana)
+        - [Algoritmo KNN](#algoritmo-knn)
+    - [Entrada e Saída](#entrada-e-saída)
+        - [Leitura do CSV](#leitura-do-csv)
+- [Como Executar](#como-executar)
+- [Requisitos](#requisitos)
+- [Exemplo de Uso](#exemplo-de-uso)
 
-Este arquivo contém o código Rust que implementa o algoritmo KNN e a lógica para carregar e processar dados de um arquivo CSV.
+## Introdução
 
-**Código:**
+Este projeto implementa o algoritmo de aprendizado de máquina K-Nearest Neighbors (KNN) usando a linguagem Rust. O KNN é
+um dos algoritmos mais simples e intuitivos de aprendizado de máquina, sendo excelente para iniciantes na área.
+
+### O que é o KNN?
+
+O KNN é um algoritmo que classifica um novo dado baseado nas características dos dados mais próximos a ele. Imagine que
+você tem várias frutas em uma mesa e quer identificar uma fruta desconhecida. Você provavelmente olharia para as frutas
+mais parecidas com ela para tentar adivinhar que fruta é. O KNN faz exatamente isso, mas usando medidas matemáticas!
+
+## Estrutura do Projeto
+
+O projeto está organizado em três arquivos principais:
+
+- `main.rs`: Contém a implementação do algoritmo
+- `dados.csv`: Arquivo com os dados de treinamento
+- `README.md`: Este arquivo de documentação
+
+## Entendendo o Algoritmo KNN
+
+O KNN funciona em 4 passos principais:
+
+1. **Receber um novo dado para classificar**
+    - Ex: Um ponto com coordenadas [4.5, 8.0]
+
+2. **Calcular a distância deste novo dado para todos os dados de treinamento**
+    - Usamos a distância euclidiana (como se fosse medir com uma régua)
+    - Quanto menor a distância, mais próximo o ponto está
+
+3. **Selecionar os K vizinhos mais próximos**
+    - Se K=3, pegamos os 3 pontos com menor distância
+    - K é um número que escolhemos (neste projeto, usamos K=3)
+
+4. **Classificar baseado na maioria**
+    - Olhamos a classe mais comum entre os K vizinhos
+    - Esta será a classe prevista para o novo dado
+
+## Conjunto de Dados
+
+O arquivo `dados.csv` contém nosso conjunto de dados com:
+
+- Duas características (feature1 e feature2)
+- Um rótulo (label) que pode ser: Classe A, B, C ou D
+- Total de dezenas de exemplos para treinamento
+
+Exemplo do formato:
+
+```csv
+feature1,feature2,label
+1.0,2.0,Classe A
+2.0,3.0,Classe A
+3.0,3.0,Classe B
+```
+
+## Explicação Detalhada do Código
+
+### Bibliotecas Utilizadas
 
 ```rust
-use csv::ReaderBuilder;
-use serde::Deserialize;
-use std::cmp::Ordering;
-use std::collections::BinaryHeap;
-use std::error::Error;
-use std::process::Command;
-use std::env;
+use csv::ReaderBuilder;        // Para ler arquivos CSV
+use serde::Deserialize;        // Para converter dados do CSV para nossas estruturas
+use std::collections::BinaryHeap; // Para ordenar os vizinhos mais próximos
+```
 
-// Estrutura para armazenar um ponto de dados
-// Um ponto possui um vetor de características (números) e um rótulo (string)
-#[derive(Debug, Clone, Deserialize)]
+### Estruturas de Dados Principais
+
+#### Estrutura Ponto
+
+```rust
 struct Ponto {
-    caracteristicas: Vec<f64>,
-    rotulo: String,
+    caracteristicas: Vec<f64>, // Vetor com as características do ponto
+    rotulo: String,           // Classe do ponto (A, B, C ou D)
 }
+```
 
-impl Ponto {
-    // Função para criar uma nova instância de Ponto
-    fn novo(caracteristicas: Vec<f64>, rotulo: String) -> Self {
-        Self { caracteristicas, rotulo }
-    }
+- `Vec<f64>`: É como um array dinâmico de números decimais
+- Cada ponto tem características (coordenadas) e um rótulo (classe)
+
+#### Estrutura Vizinho
+
+```rust
+struct Vizinho {
+    distancia: f64,  // Distância até o ponto de teste
+    rotulo: String,  // Classe deste vizinho
 }
+```
 
-// Função para calcular a distância euclidiana entre dois pontos
-// A distância euclidiana é a raiz quadrada da soma das diferenças quadradas de cada coordenada
+### Funções Principais
+
+#### Distância Euclidiana
+
+```rust
 fn distancia_euclidiana(ponto1: &Ponto, ponto2: &Ponto) -> f64 {
+    // Calcula a distância entre dois pontos
     ponto1.caracteristicas.iter()
         .zip(ponto2.caracteristicas.iter())
         .map(|(a, b)| (a - b).powi(2))
         .sum::<f64>()
         .sqrt()
 }
+```
 
-// Estrutura auxiliar para manter a distância e o rótulo em uma estrutura Heap
-#[derive(Debug)]
-struct Vizinho {
-    distancia: f64,
-    rotulo: String,
-}
+- Calcula a distância "em linha reta" entre dois pontos
+- Usa o teorema de Pitágoras generalizado
 
-impl Vizinho {
-    // Função para criar uma nova instância de Vizinho
-    fn novo(distancia: f64, rotulo: String) -> Self {
-        Self { distancia, rotulo }
-    }
-}
+#### Algoritmo KNN
 
-// Implementação para comparação de distância (menor distância tem prioridade)
-// Implementar o trait Ord para permitir a estrutura ser usada em um BinaryHeap
-impl Ord for Vizinho {
-    fn cmp(&self, outro: &Self) -> Ordering {
-        outro.distancia.partial_cmp(&self.distancia).unwrap()
-    }
-}
-
-impl PartialOrd for Vizinho {
-    fn partial_cmp(&self, outro: &Self) -> Option<Ordering> {
-        Some(self.cmp(outro))
-    }
-}
-
-impl PartialEq for Vizinho {
-    fn eq(&self, outro: &Self) -> bool {
-        self.distancia == outro.distancia
-    }
-}
-
-impl Eq for Vizinho {}
-
-// Função K-Nearest Neighbors
-// Dado um conjunto de treinamento, um ponto de teste e um valor k,
-// encontra os k vizinhos mais próximos do ponto de teste e retorna o rótulo mais comum
+```rust
 fn knn(treinamento: &[Ponto], ponto_teste: &Ponto, k: usize) -> String {
     let mut heap = BinaryHeap::new();
-    // Calcular a distância de cada ponto de treinamento até o ponto de teste
-    for ponto_treinamento in treinamento {
-        let distancia = distancia_euclidiana(ponto_teste, ponto_treinamento);
-        heap.push(Vizinho::novo(distancia, ponto_treinamento.rotulo.clone()));
-    }
-
-    // Coletar os rótulos dos k vizinhos mais próximos
-    let mut k_vizinhos_rotulos = Vec::new();
-    for _ in 0..k {
-        if let Some(vizinho) = heap.pop() {
-            k_vizinhos_rotulos.push(vizinho.rotulo);
-        }
-    }
-
-    // Contar a frequência de cada rótulo nos k vizinhos mais próximos
-    let mut contador_rotulos = std::collections::HashMap::new();
-    for rotulo in k_vizinhos_rotulos {
-        *contador_rotulos.entry(rotulo).or_insert(0) += 1;
-    }
-
-    // Retornar o rótulo mais comum entre os k vizinhos
-    contador_rotulos.into_iter()
-        .max_by_key(|&(_, count)| count)
-        .map(|(rotulo, _)| rotulo)
-        .unwrap()
-}
-
-// Função para carregar dados de um arquivo CSV
-// Cada linha do CSV é um ponto com características e um rótulo
-fn carregar_dados_do_csv(caminho_arquivo: &str) -> Result<Vec<Ponto>, Box<dyn Error>> {
-    let mut leitor = ReaderBuilder::new().from_path(caminho_arquivo)?;
-    let mut pontos = Vec::new();
-
-    // Ler cada registro do CSV e criar um Ponto a partir dele
-    for resultado in leitor.deserialize() {
-        let registro: (f64, f64, String) = resultado?;
-        pontos.push(Ponto::novo(vec![registro.0, registro.1], registro.2));
-    }
-
-    Ok(pontos)
-}
-
-// Função para limpar o terminal
-fn limpar_terminal() {
-    if cfg!(target_os = "windows") {
-        Command::new("cmd").args(&["/C", "cls"]).status().unwrap();
-    } else {
-        Command::new("clear").status().unwrap();
-    }
-}
-
-fn main() -> Result<(), Box<dyn Error>> {
-    // Limpar o terminal
-    limpar_terminal();
-    // Carregar dados do arquivo CSV
-    let dados_treinamento = carregar_dados_do_csv("src/dados.csv")?;
-    // Definir um ponto de teste
-    let ponto_teste = Ponto::novo(vec![4.5, 8.0], "Desconhecido".to_string());
-    // Aplicar KNN com k=3
-    let rotulo = knn(&dados_treinamento, &ponto_teste, 3);
-    // Exibir o rótulo previsto para o ponto de teste
-    println!("Rótulo previsto para os dados de teste {:?} é {}", ponto_teste.caracteristicas, rotulo);
-
-    Ok(())
+    // ... código de classificação
 }
 ```
-**Explicação detalhada do código:**
 
-1. **Importar bibliotecas:**
-   - `csv`: Usada para ler e processar arquivos CSV.
-   - `serde`: Usada para serialização e desserialização de dados.
-   - `std::cmp::Ordering`: Usada para comparar valores.
-   - `std::collections::BinaryHeap`: Usada para armazenar os vizinhos mais próximos.
-   - `std::error::Error`: Usada para tratamento de erros.
-   - `std::process::Command`: Usada para executar comandos do sistema.
-   - `std::env`: Usada para interagir com o ambiente do sistema.
+- Recebe os dados de treinamento, um ponto para classificar e o valor de K
+- Retorna a classe prevista para o ponto de teste
 
-2. **Estruturas de dados:**
-   - `Ponto`: Representa um ponto de dados com características (números) e um rótulo (classe).
-   - `Vizinho`: Armazena a distância e o rótulo de um ponto de dados em relação a outro ponto.
+### Entrada e Saída
 
-3. **Funções:**
-   - `distancia_euclidiana`: Calcula a distância euclidiana entre dois pontos.
-   - `knn`: Implementa o algoritmo KNN.
-      - Calcula a distância entre o ponto de teste e cada ponto de treinamento.
-      - Armazena as distâncias e rótulos em um heap.
-      - Seleciona os k vizinhos mais próximos.
-      - Encontra o rótulo mais comum entre os k vizinhos.
-   - `carregar_dados_do_csv`: Carrega dados de um arquivo CSV.
-   - `limpar_terminal`: Limpa o terminal.
+#### Leitura do CSV
 
-4. **Função principal (`main`)**:
-   - Limpa o terminal.
-   - Carrega os dados de treinamento do arquivo CSV.
-   - Define um ponto de teste.
-   - Aplica o algoritmo KNN ao ponto de teste.
-   - Exibe o rótulo previsto para o ponto de teste.
+```rust
+fn carregar_dados_do_csv(caminho_arquivo: &str) -> Result<Vec<Ponto>, Box<dyn Error>> {
+    // Código para ler o arquivo CSV e converter em pontos
+}
+```
+
+- Lê o arquivo CSV e converte cada linha em um `Ponto`
+- Trata possíveis erros durante a leitura
+
+## Como Executar
+
+1. Instale o Rust (https://rustup.rs/)
+2. Clone este repositório
+3. No terminal, navegue até a pasta do projeto
+4. Execute:
+
+```bash
+cargo run
+```
+
+## Requisitos
+
+- Rust
+- Cargo (gerenciador de pacotes do Rust)
+- Bibliotecas:
+    - csv
+    - serde
 
 ## Exemplo de Uso
 
-O arquivo `dados.csv` contém dados de treinamento com 2 características (feature1 e feature2) e um rótulo (label).
-O programa define um ponto de teste com características `[4.5, 8.0]` e usa o algoritmo KNN com `k=3` para prever o rótulo do ponto de teste.
+```rust
+// Criar um ponto de teste
+let ponto_teste = Ponto::novo(vec![4.5, 8.0], "Desconhecido".to_string());
 
-**Saída:**
+// Classificar usando KNN
+let rotulo = knn(&dados_treinamento, &ponto_teste, 3);
 
+// Ver o resultado
+println!("Classe prevista: {}", rotulo);
 ```
-Rótulo previsto para os dados de teste [4.5, 8.0] é ClasseB
+
+### Saída Esperada:
 ```
+Rótulo previsto para os dados de teste [4.5, 8.0] é Classe A
+
+Process finished with exit code 0
+```
+
+
+
+
+
+
+
